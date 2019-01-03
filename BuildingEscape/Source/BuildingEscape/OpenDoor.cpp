@@ -1,7 +1,8 @@
 // Copyright Ben Tristem 2016.
 
-#include "BuildingEscape.h"
 #include "OpenDoor.h"
+#include "BuildingEscape.h"
+#include "GameFramework/Actor.h"
 
 #define OUT
 
@@ -10,12 +11,10 @@ UOpenDoor::UOpenDoor()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
 }
-
 
 // Called when the game starts
 void UOpenDoor::BeginPlay()
@@ -24,7 +23,7 @@ void UOpenDoor::BeginPlay()
 	Owner = GetOwner();
 	if (!PressurePlate)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s missing pressure plate"), *GetOwner()->GetName())
+		UE_LOG(LogTemp, Error, TEXT("Missing Pressure Plate on: %s"), *GetOwner()->GetName())
 	}
 }
 
@@ -34,7 +33,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Poll the Trigger Volume
-	if (GetTotalMassOfActorsOnPlate() > TriggerMass)
+	if (GetTotalMassOfActorOnThePlate() > TriggerMass)	// TODO make into parameter
 	{
 		OnOpen.Broadcast();
 	}
@@ -44,20 +43,17 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 }
 
-float UOpenDoor::GetTotalMassOfActorsOnPlate()
+float UOpenDoor::GetTotalMassOfActorOnThePlate()
 {
-	float TotalMass = 0.f;
+	float TotalMass = 0.0f;
 
-	// Find all the overlapping actors
 	TArray<AActor*> OverlappingActors;
 	if (!PressurePlate) { return TotalMass; }
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 
-	// Iterate through them adding their masses
 	for (const auto& Actor : OverlappingActors)
 	{
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
-		UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *Actor->GetName())
 	}
 
 	return TotalMass;
