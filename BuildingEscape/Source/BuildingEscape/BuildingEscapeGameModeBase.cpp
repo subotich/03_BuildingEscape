@@ -1,8 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "BuildingEscapeGameModeBase.h"
 #include "BuildingEscape.h"
-#include "BuildingEscapeGameMode.h"
-
-
-
 
