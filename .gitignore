@@ -13,6 +13,11 @@ BuildingEscape/Content/StarterContent/HDRI
 # VS Generated Files #
 ######################
 *.VC.db
+BuildingEscape/.vs/BuildingEscape/v15/Solution.VC.db-shm
+BuildingEscape/.vs/BuildingEscape/v15/Browse.VC.opendb
+BuildingEscape/.vs/BuildingEscape/v15/Solution.VC.db-wal
+BuildingEscape/.vs/BuildingEscape/v15/ipch/*
 *.suo
+*.VC.db
 *.VC.opendb
 *.sln
